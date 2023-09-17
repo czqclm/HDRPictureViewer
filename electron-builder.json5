@@ -3,9 +3,9 @@
  */
 {
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  "appId": "YourAppID",
+  "appId": "icu.aicq.hdrPictureViewer",
   "asar": true,
-  "productName": "YourAppName",
+  "productName": "HDRPictureViewer",
   "directories": {
     "output": "release/${version}"
   },
@@ -28,7 +28,8 @@
         ]
       }
     ],
-    "artifactName": "${productName}-Windows-${version}-Setup.${ext}"
+    "artifactName": "${productName}-Windows-${version}-Setup.${ext}",
+    "icon": "./public/favicon.ico"
   },
   "nsis": {
     "oneClick": false,

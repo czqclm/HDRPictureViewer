@@ -1,6 +1,8 @@
-import { app, BrowserWindow, shell, ipcMain } from 'electron'
+import { app, BrowserWindow, shell, ipcMain,dialog  } from 'electron'
 import { release } from 'node:os'
 import { join } from 'node:path'
+const fs = require('fs')
+const path = require('path')
 
 // The built directory structure
 //
@@ -44,6 +46,7 @@ async function createWindow() {
   win = new BrowserWindow({
     title: 'Main window',
     icon: join(process.env.VITE_PUBLIC, 'favicon.ico'),
+    // autoHideMenuBar: true,
     webPreferences: {
       preload,
       // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
@@ -51,13 +54,15 @@ async function createWindow() {
       // Read more on https://www.electronjs.org/docs/latest/tutorial/context-isolation
       nodeIntegration: true,
       contextIsolation: false,
+      webSecurity: false, // false 之后就可以访问 本地资源文件了
     },
   })
+  win.setMenu(null)
 
   if (process.env.VITE_DEV_SERVER_URL) { // electron-vite-vue#298
     win.loadURL(url)
     // Open devTool if the app is not packaged
-    win.webContents.openDevTools()
+    // win.webContents.openDevTools()
   } else {
     win.loadFile(indexHtml)
   }
@@ -115,3 +120,31 @@ ipcMain.handle('open-win', (_, arg) => {
     childWindow.loadFile(indexHtml, { hash: arg })
   }
 })
+
+ipcMain.on('select-directory', (event) => {
+  dialog.showOpenDialog({
+    properties: ['openDirectory']
+  }).then(result => {
+    if (!result.canceled) {
+      const directoryPath = result.filePaths[0]
+      loadPhotosFromDirectory(directoryPath)
+    }
+  })
+})
+
+function loadPhotosFromDirectory(directoryPath) {
+  fs.readdir(directoryPath, (err, files) => {
+    if (err) {
+      console.error(err)
+      return
+    }
+    const photoFiles = files.filter(file => {
+      console.log("file", file)
+      const extname = path.extname(file)
+      return ['.jpg', '.jpeg', '.png', ".avif"].includes(extname.toLowerCase())
+    })
+    const photoPaths = photoFiles.map(file => path.join(directoryPath, file))
+    // 将photoPaths发送给渲染进程
+    win.webContents.send('photo-paths', photoPaths)
+  })
+}
