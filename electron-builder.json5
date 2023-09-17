@@ -5,7 +5,7 @@
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
   "appId": "icu.aicq.hdrPictureViewer",
   "asar": true,
-  "productName": "HDRPictureViewer",
+  "productName": "HDR 图片查看",
   "directories": {
     "output": "release/${version}"
   },
@@ -17,7 +17,8 @@
     "target": [
       "dmg"
     ],
-    "artifactName": "${productName}-Mac-${version}-Installer.${ext}"
+    "artifactName": "${productName}-Mac-${version}-Installer.${ext}",
+    "icon": "./public/favicon.png"
   },
   "win": {
     "target": [
