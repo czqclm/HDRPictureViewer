@@ -11,7 +11,8 @@ export default {
       srcList: [],
       tipShow: true,
       SDRSupport: false,
-      HDRSupport: false
+      HDRSupport: false,
+      collapseHide: true,
     }
   },
   methods: {
@@ -25,8 +26,8 @@ export default {
       this.SDRSupport = window.matchMedia("(dynamic-range: standard)").matches
       this.HDRSupport = window.matchMedia("(dynamic-range: high)").matches
     },
-    gotobilibili() {
-      shell.openExternal('https://space.bilibili.com/2905988?spm_id_from=333.1007.0.0');
+    gotoBrowser(url) {
+      shell.openExternal(url);
     }
   },
   mounted() {
@@ -58,7 +59,7 @@ export default {
   <div class="home">
     <a-layout style="height: 100%;">
       <a-layout-header>
-        <a-collapse bordered="false" destroy-on-hide="true" v-if="tipShow" style="margin: 10px;">
+        <a-collapse bordered="false" :destroy-on-hide="collapseHide"  v-if="tipShow" style="margin: 10px;">
           <a-collapse-item  header="如何验证我可以查看 HDR 照片" key="1" style="text-align: left; line-height: 25px;">
             <div style="position: absolute; top: 10px; right: 20px;" @click="this.tipShow = !this.tipShow">
               <a-link>不在提示？<icon-close /></a-link>
@@ -70,7 +71,7 @@ export default {
             <br />
             <br />
             <div>
-              2. HDR 图片测试 <a-link href="link">原文章地址</a-link>
+              2. HDR 图片测试 <a-link  @click="gotoBrowser('https://laichi.cc/article/avif-viewing-test#f9fe746a849141c6b7a6da4bc286de3elaichi.cc/article/avif-viewing-test#f9fe746a849141c6b7a6da4bc286de3e')" >原文章地址</a-link>
               <a-image height="20" src="avif_peak.avif" style="display: block;margin: 10px 0;" />
               <div>
                 这是一个从 10000nit 到 400nit 的带15个圆点的渐变，其中最右侧的圆点应为1000nit
@@ -106,7 +107,12 @@ export default {
         <template v-else>
           <a-image-preview-group infinite>
             <a-space wrap style="margin: 10px;">
-              <a-image v-for="(item, index) in srcList" :src="item" width="120px" height="120px" fit="cover" show-loader>
+              <a-image v-for="(item, index) in srcList"
+              :src="item" 
+              width="200px" 
+              height="200px" 
+              fit="cover" 
+              show-loader>
               </a-image>
             </a-space>
           </a-image-preview-group>
@@ -114,7 +120,10 @@ export default {
       </a-layout-content>
     </a-layout>
     <div style="position: absolute; bottom: 20px; right: 20px;">
-      powered by <a-link @click="gotobilibili" icon>无笙</a-link>
+      <div style="text-align:right;">
+        <a-button shape="circle" status="warning" @click="this.tipShow = true; this.collapseHide = false"> <template #icon><icon-question /></template> </a-button>
+      </div>
+      powered by <a-link @click="gotoBrowser('https://space.bilibili.com/2905988?spm_id_from=333.1007.0.0')" icon>无笙</a-link>
     </div>
   </div>
 </template>
