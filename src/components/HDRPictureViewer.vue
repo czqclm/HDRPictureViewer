@@ -5,7 +5,7 @@ import { shell } from 'electron'
 
 export default {
   components: { IconSync, IconClose },
-  name: 'HomeView',
+  name: 'HDRPictureViewer',
   data() {
     return {
       srcList: [],

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import HDRPictureViewer from './components/HDRPictureViewer.vue'
 </script>
 
 <template>
-  <HelloWorld />
+  <HDRPictureViewer />
 </template>
 
 <style>
